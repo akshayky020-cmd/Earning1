@@ -5,6 +5,7 @@ import './index.css';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { ThemeProvider } from './contexts/ThemeContext.tsx';
 import './lib/api';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 window.addEventListener('error', (event) => {
   console.error('Global error:', event.error, event.message);
@@ -12,6 +13,9 @@ window.addEventListener('error', (event) => {
 });
 
 console.log('Mounting React app...');
+
+// Initialize Vercel Speed Insights
+injectSpeedInsights();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
