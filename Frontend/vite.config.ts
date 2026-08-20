@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
 
-const apiTarget = process.env.VITE_API_BASE_URL || 'http://localhost:5001';
+const apiTarget = process.env.VITE_API_BASE_URL || 'https://earning1.onrender.com';
 
 export default defineConfig(() => {
   return {
