@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, HeadphonesIcon, MessageCircle, Mail, Clock } from 'lucide-react';
+import { ArrowLeft, HeadphonesIcon, MessageCircle, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Support = () => {
@@ -24,23 +24,13 @@ export const Support = () => {
         </div>
 
         <div className="grid gap-4">
-          <a onClick={(e) => { e.preventDefault(); alert("Live Chat is currently offline. Please email support."); }} className="flex items-center p-4 bg-white dark:bg-[#1e1e1e] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm hover:border-primary-500 transition-colors group">
+          <a href="https://t.me/Earning7s" target="_blank" rel="noopener noreferrer" className="flex items-center p-4 bg-white dark:bg-[#1e1e1e] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm hover:border-primary-500 transition-colors group">
             <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 mr-4 group-hover:bg-green-500 group-hover:text-white transition-colors">
               <MessageCircle size={24} />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-gray-900 dark:text-white">Live Chat</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Response time: usually under 5 minutes</p>
-            </div>
-          </a>
-
-          <a href="mailto:support@investpro.app" className="flex items-center p-4 bg-white dark:bg-[#1e1e1e] rounded-2xl border border-gray-100 dark:border-white/5 shadow-sm hover:border-primary-500 transition-colors group">
-            <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mr-4 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-              <Mail size={24} />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-gray-900 dark:text-white">Email Support</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">support@investpro.app</p>
+              <h3 className="font-bold text-gray-900 dark:text-white">Telegram Support</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400">@Earning7s</p>
             </div>
           </a>
         </div>
