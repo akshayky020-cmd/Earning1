@@ -139,7 +139,7 @@ export const AdminPlans = () => {
       {/* Header */}
       <header className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-black text-gray-900 dark:text-white">Mining Plans</h1>
+          <h1 className="text-2xl font-black text-gray-900 dark:text-white">Earning Plans</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Add, edit, or delete investment plans. Each plan has its own QR code.</p>
         </div>
         <button

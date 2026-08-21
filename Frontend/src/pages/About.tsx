@@ -19,10 +19,10 @@ export const About = () => {
           <div className="w-24 h-24 bg-primary-500 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3 shadow-lg shadow-primary-500/30">
             <Zap size={48} className="text-white" />
           </div>
-          <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-2">MINING ENERGY</h2>
-          <p className="text-primary-600 dark:text-primary-400 font-bold uppercase tracking-widest text-sm mb-4">Cloud Mining Infrastructure</p>
+          <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-2">EARNING1</h2>
+          <p className="text-primary-600 dark:text-primary-400 font-bold uppercase tracking-widest text-sm mb-4">Cloud Earning Infrastructure</p>
           <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
-            We are a leading provider of cloud mining services, offering accessible and profitable cryptocurrency mining solutions for everyone. Our state-of-the-art facilities ensure maximum uptime and optimal hash rates.
+            We are a leading provider of cloud earning services, offering accessible and profitable cryptocurrency earning solutions for everyone. Our state-of-the-art facilities ensure maximum uptime and optimal hash rates.
           </p>
         </div>
 
@@ -34,7 +34,7 @@ export const About = () => {
             <div>
               <h3 className="font-bold text-gray-900 dark:text-white mb-1">Global Operations</h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                Our data centers are strategically located in regions with abundant renewable energy, reducing costs and environmental impact while maximizing returns.
+                Our data centers are strategically located in regions with abundant renewable 1, reducing costs and environmental impact while maximizing returns.
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const About = () => {
 
         <div className="text-center pt-8 border-t border-gray-200 dark:border-white/10">
           <p className="text-xs text-gray-400 font-medium">Version 1.0.0</p>
-          <p className="text-xs text-gray-400 mt-1">&copy; 2024 Mining Energy. All rights reserved.</p>
+          <p className="text-xs text-gray-400 mt-1">&copy; 2024 Earning 1. All rights reserved.</p>
         </div>
       </div>
     </div>

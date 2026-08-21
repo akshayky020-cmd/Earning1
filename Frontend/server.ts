@@ -224,13 +224,18 @@ async function startServer() {
   app.post("/api/user/ads/watch", (req, res) => {
     try {
       const { userId, adId } = req.body;
+      if (!userId || !adId) {
+        return res.status(400).json({ error: "userId and adId are required" });
+      }
+
       const ad = db.prepare("SELECT * FROM ads WHERE id = ? AND status = 'active'").get(adId) as any;
       if (!ad) {
         return res.status(400).json({ error: "Invalid or inactive ad" });
       }
 
       const today = new Date().toISOString().split('T')[0];
-      const timeNow = new Date().toISOString();
+      const now = new Date();
+      const timeNow = now.toISOString();
       
       let user = db.prepare("SELECT * FROM users WHERE id = ?").get(userId) as any;
       if (!user) {
@@ -238,11 +243,34 @@ async function startServer() {
         user = db.prepare("SELECT * FROM users WHERE id = ?").get(userId);
       }
 
-      // 100 coins = 1 Rs. Conversion happens in frontend request or automatically.
-      // Let's add coins.
-      const newCoins = user.coins + ad.rewardCoins;
-      const newTodayEarnings = (user.lastAdDate === today ? user.todayEarnings : 0) + ad.rewardCoins;
-      const newTotalWatched = user.totalAdsWatched + 1;
+      // Reset totalAdsWatched if it's a new day
+      let currentTotalWatched = user.totalAdsWatched || 0;
+      let currentTodayEarnings = user.todayEarnings || 0;
+      if (user.lastAdDate !== today) {
+        currentTotalWatched = 0;
+        currentTodayEarnings = 0;
+      }
+
+      // Enforce server-side daily ad limit (10 ads max per day)
+      const MAX_DAILY_ADS = 10;
+      if (currentTotalWatched >= MAX_DAILY_ADS) {
+        return res.status(400).json({ error: "Daily ad limit of 10 ads reached for today." });
+      }
+
+      // Anti-cheat Cooldown Check: Verify user hasn't claimed a reward in the last 10 seconds
+      const lastReward = db.prepare("SELECT date FROM ad_history WHERE userId = ? ORDER BY id DESC LIMIT 1").get(userId) as any;
+      if (lastReward && lastReward.date) {
+        const lastTime = new Date(lastReward.date).getTime();
+        const diffSeconds = (now.getTime() - lastTime) / 1000;
+        if (diffSeconds < 10) {
+          return res.status(429).json({ error: "Reward claims are rate limited. Please watch the full ad before claiming." });
+        }
+      }
+
+      // Update user wallet balance and history
+      const newCoins = (user.coins || 0) + ad.rewardCoins;
+      const newTodayEarnings = currentTodayEarnings + ad.rewardCoins;
+      const newTotalWatched = currentTotalWatched + 1;
 
       db.prepare("UPDATE users SET coins = ?, todayEarnings = ?, totalAdsWatched = ?, lastAdDate = ? WHERE id = ?").run(
         newCoins, newTodayEarnings, newTotalWatched, today, userId
@@ -252,9 +280,9 @@ async function startServer() {
         userId, ad.id, ad.title, ad.rewardCoins, timeNow
       );
 
-      res.json({ success: true, coins: newCoins });
+      res.json({ success: true, coins: newCoins, totalAdsWatched: newTotalWatched });
     } catch (err) {
-      console.error(err);
+      console.error('Ad watch error:', err);
       res.status(500).json({ error: "Failed to complete ad watch" });
     }
   });

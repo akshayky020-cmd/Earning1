@@ -30,7 +30,7 @@ export const Layout = () => {
           <div className="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center transform rotate-3 shadow-lg shadow-primary-500/30">
             <Zap size={24} className="text-white" />
           </div>
-          <span className="text-xl font-black tracking-tight">MINING<span className="text-primary-500">ENERGY</span></span>
+          <span className="text-xl font-black tracking-tight">EARNING<span className="text-primary-500">1</span></span>
         </div>
         
         <nav className="flex items-center space-x-8">

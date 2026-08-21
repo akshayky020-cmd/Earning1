@@ -34,7 +34,7 @@ export const Team = () => {
             <Gift size={32} />
           </div>
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Grow Your Team</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Invite friends to join and earn daily commission from their mining activities.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Invite friends to join and earn daily commission from their earning activities.</p>
           <button onClick={() => navigate('/invite')} className="w-full py-3 bg-primary-500 text-white rounded-xl font-bold shadow-md hover:bg-primary-600 transition-colors">
             Invite Friends Now
           </button>

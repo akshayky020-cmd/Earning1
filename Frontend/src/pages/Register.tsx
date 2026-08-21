@@ -77,17 +77,17 @@ export const Register = () => {
               <Zap className="w-8 h-8 text-primary-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-black tracking-tight">MINING ENERGY</h1>
-              <p className="text-sm font-bold text-primary-200 tracking-widest uppercase">Cloud Mining Platform</p>
+              <h1 className="text-3xl font-black tracking-tight">EARNING1</h1>
+              <p className="text-sm font-bold text-primary-200 tracking-widest uppercase">Cloud Earning Platform</p>
             </div>
           </div>
           
           <h2 className="text-4xl lg:text-5xl font-black mt-20 leading-tight">
-            Start mining crypto <br />
+            Start earning crypto <br />
             <span className="text-primary-200">from your phone.</span>
           </h2>
           <p className="mt-6 text-lg text-primary-100 max-w-md font-medium">
-            Join thousands of users generating passive income daily with our cloud mining infrastructure.
+            Join thousands of users generating passive income daily with our cloud earning infrastructure.
           </p>
         </div>
 
@@ -121,8 +121,8 @@ export const Register = () => {
             <div className="w-14 h-14 bg-primary-500 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30 mb-3 transform -rotate-3">
               <Zap className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">MINING <span className="text-primary-500">ENERGY</span></h1>
-            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-widest">Powering the future of mining</p>
+            <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">EARNING <span className="text-primary-500">1</span></h1>
+            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-widest">Powering the future of earning</p>
           </div>
 
           <div className="text-left">

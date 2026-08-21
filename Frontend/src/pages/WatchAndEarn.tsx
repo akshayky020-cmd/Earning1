@@ -4,6 +4,27 @@ import api from '../lib/api';
 import { RootState } from '../store';
 import { PlayCircle, Coins, Wallet, History, Gift, ArrowRightLeft } from 'lucide-react';
 
+// ==================== ADMOB APP ID — PASTE YOUR APP ID HERE ====================
+export const ADMOB_APP_ID = "ca-app-pub-2517322277618453~1308741992";
+// ==============================================================================
+
+// ==================== REWARDED AD UNIT ID — PASTE YOUR REWARDED AD UNIT ID HERE ====================
+export const REWARDED_AD_UNIT_ID = "ca-app-pub-2517322277618453/6948131813";
+// ==============================================================================
+
+// Global interface for Android WebView bridge / Capacitor fallback
+declare global {
+  interface Window {
+    AdMob?: any;
+    Capacitor?: any;
+    AndroidAdMob?: {
+      showRewardedAd: (unitId: string) => void;
+    };
+    onAdMobRewardEarned?: (adId: number) => void;
+    onAdMobAdFailed?: (errorMsg: string) => void;
+  }
+}
+
 interface Ad {
   id: number;
   network: string;
@@ -60,11 +81,54 @@ export const WatchAndEarn = () => {
     fetchData();
   }, [user]);
 
+  // Initialize AdMob SDK if running inside mobile APK container (Capacitor)
+  useEffect(() => {
+    const initAdMob = async () => {
+      if (window.Capacitor?.isPluginAvailable('AdMob')) {
+        try {
+          // @ts-ignore
+          const { AdMob } = await import('@capacitor-community/admob');
+          await AdMob.initialize({
+            initializeForTesting: false,
+          });
+        } catch (err) {
+          console.warn('AdMob plugin init note:', err);
+        }
+      }
+    };
+    initAdMob();
+  }, []);
+
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(''), 3000);
   };
 
+  /**
+   * Called ONLY AFTER the user successfully earns the AdMob reward event
+   */
+  const handleRewardClaim = async (ad: Ad) => {
+    try {
+      const res = await api.post('/api/user/ads/watch', {
+        userId: user?._id,
+        adId: ad.id
+      });
+      if (res.data.success) {
+        showToast(`Congratulations! You earned ${ad.rewardCoins} Coins.`);
+        fetchData();
+      } else {
+        showToast(res.data.error || 'Failed to claim ad reward.');
+      }
+    } catch (err) {
+      showToast('Error verifying ad reward on backend server.');
+    } finally {
+      setIsWatching(false);
+    }
+  };
+
+  /**
+   * Real Google AdMob Rewarded Ad Watch Handler
+   */
   const handleWatchAd = async (ad: Ad) => {
     if (!wallet) return;
     if (wallet.totalAdsWatched >= dailyLimit) {
@@ -73,22 +137,88 @@ export const WatchAndEarn = () => {
     }
     
     setIsWatching(true);
-    // Simulate Ad SDK integration
-    setTimeout(async () => {
+
+    let adRewardEarned = false;
+
+    // 1. Capacitor AdMob Plugin Integration (Recommended for React Web -> Mobile APK)
+    if (window.Capacitor?.isPluginAvailable('AdMob')) {
       try {
-        const res = await api.post('/api/user/ads/watch', {
-          userId: user?._id,
-          adId: ad.id
+        // @ts-ignore
+        const { AdMob, RewardAdPluginEvents } = await import('@capacitor-community/admob');
+        
+        // Listen for actual reward completion event from AdMob SDK
+        const rewardListener = await AdMob.addListener(
+          RewardAdPluginEvents.Rewarded,
+          (rewardItem: any) => {
+            console.log('AdMob Rewarded Event Triggered:', rewardItem);
+            adRewardEarned = true;
+          }
+        );
+
+        // Listen for ad dismissal / close event
+        const dismissListener = await AdMob.addListener(
+          RewardAdPluginEvents.Dismissed,
+          async () => {
+            rewardListener.remove();
+            dismissListener.remove();
+
+            // ONLY claim reward if user watched the ad long enough to trigger reward event
+            if (adRewardEarned) {
+              await handleRewardClaim(ad);
+            } else {
+              showToast('Ad was closed before completion. No reward earned.');
+              setIsWatching(false);
+            }
+          }
+        );
+
+        // Listen for ad loading failures
+        const failedListener = await AdMob.addListener(
+          RewardAdPluginEvents.FailedToLoad,
+          (error) => {
+            rewardListener.remove();
+            dismissListener.remove();
+            failedListener.remove();
+            console.error('AdMob Failed to Load:', error);
+            showToast('Failed to load advertisement. Please try again.');
+            setIsWatching(false);
+          }
+        );
+
+        // Prepare & show the real AdMob Rewarded Ad
+        await AdMob.prepareRewardVideoAd({
+          adId: REWARDED_AD_UNIT_ID,
+          ssv: {
+            customData: JSON.stringify({ userId: user?._id, adId: ad.id })
+          }
         });
-        if (res.data.success) {
-          showToast(`Congratulations! You earned ${ad.rewardCoins} Coins.`);
-          fetchData();
-        }
+
+        await AdMob.showRewardVideoAd();
+        return;
       } catch (err) {
-        showToast('Error verifying ad reward.');
+        console.error('Capacitor AdMob error:', err);
       }
-      setIsWatching(false);
-    }, 2000);
+    }
+
+    // 2. Native Android WebView Bridge (For custom Kotlin/Java Android APK Wrappers)
+    if (window.AndroidAdMob && typeof window.AndroidAdMob.showRewardedAd === 'function') {
+      window.onAdMobRewardEarned = async (rewardedAdId: number) => {
+        if (rewardedAdId === ad.id) {
+          await handleRewardClaim(ad);
+        }
+      };
+      window.onAdMobAdFailed = (errorMsg: string) => {
+        showToast(errorMsg || 'Failed to watch ad.');
+        setIsWatching(false);
+      };
+
+      window.AndroidAdMob.showRewardedAd(REWARDED_AD_UNIT_ID);
+      return;
+    }
+
+    // 3. Fallback when testing in a normal browser without an APK wrapper
+    showToast('Google AdMob Rewarded Ads require running inside the Android APK.');
+    setIsWatching(false);
   };
 
   const handleConvert = async (coinsToConvert: number) => {

@@ -45,7 +45,7 @@ export const Plans = () => {
     return (
       <div className="p-8 text-center">
         <div className="inline-block w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="text-gray-500">Loading mining plans…</p>
+        <p className="text-gray-500">Loading earning plans…</p>
       </div>
     );
   }
@@ -54,7 +54,7 @@ export const Plans = () => {
     <div className="space-y-6 max-w-6xl mx-auto p-4">
       <header className="mb-6 flex flex-col pt-4">
         <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
-          MINING <span className="text-primary-500">MACHINES</span>
+          EARNING <span className="text-primary-500">MACHINES</span>
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Rent top-tier cloud miners to generate passive income daily.
@@ -72,7 +72,7 @@ export const Plans = () => {
           <div className="col-span-full text-center py-12">
             <Cpu size={48} className="mx-auto text-gray-300 dark:text-gray-700 mb-3" />
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">No Plans Available</h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">New mining plans will be added soon.</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">New earning plans will be added soon.</p>
           </div>
         )}
 
