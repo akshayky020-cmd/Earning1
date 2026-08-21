@@ -37,7 +37,9 @@ export const Login = () => {
         ? { email: identifier, password }
         : { mobile: identifier, password };
 
+      console.log('Login attempt:', { identifier, payload });
       const response = await api.post('/api/auth/login', payload);
+      console.log('Login response:', response.data);
       const user = response.data;
 
       dispatch(setCredentials({
@@ -49,10 +51,13 @@ export const Login = () => {
 
       navigate('/dashboard');
     } catch (err: any) {
+      console.error('Login error:', err);
+      console.error('Error response:', err.response);
+      console.error('Error message:', err.message);
       if (err.response?.status === 401) {
         setError('Please register first or enter the correct credentials.');
       } else {
-        setError(err.response?.data?.message || err.response?.data?.error?.message || 'Something went wrong');
+        setError(err.response?.data?.message || err.response?.data?.error?.message || err.message || 'Something went wrong');
       }
     }
   };

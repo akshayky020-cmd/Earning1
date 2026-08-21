@@ -147,17 +147,18 @@ const refreshToken = async (req, res) => {
 // @access  Public
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, mobile, password } = req.body;
 
-        const normalizedEmail = String(email || '').trim().toLowerCase();
-        if (!email || normalizedEmail.length > 255) {
-            return res.status(400).json({ message: 'Please provide a valid email.' });
+        const identifier = String(email || mobile || '').trim().toLowerCase();
+        
+        if (!identifier || identifier.length > 255) {
+            return res.status(400).json({ message: 'Please provide a valid email or mobile number.' });
         }
         if (!password || typeof password !== 'string') {
             return res.status(400).json({ message: 'Password is required.' });
         }
 
-        const user = await User.findOne({ $or: [{ email: normalizedEmail }, { mobile: normalizedEmail }] });
+        const user = await User.findOne({ $or: [{ email: identifier }, { mobile: identifier }] });
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
@@ -169,6 +170,7 @@ const login = async (req, res) => {
 
         return res.json(buildUserResponse(user));
     } catch (error) {
+        console.error('Login error:', error);
         return res.status(500).json({ message: 'Login failed.' });
     }
 };
