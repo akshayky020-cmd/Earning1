@@ -49,7 +49,7 @@ app.use(helmet({
             styleSrc:   ["'self'", "'unsafe-inline'"],
             imgSrc:     ["'self'", "data:", "https:"],
             fontSrc:    ["'self'"],
-            connectSrc: ["'self'"],
+            connectSrc: ["'self'", "https://earning1-lime.vercel.app", "https://earning1.onrender.com"],
         },
     },
     referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
@@ -60,8 +60,21 @@ app.use(helmet({
 }));
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
+const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:3001',
+    'https://earning1-lime.vercel.app'
+];
+
 app.use(cors({
-    origin:         process.env.FRONTEND_URL || 'http://localhost:3001',
+    origin:         function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials:    true,
     methods:        ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],

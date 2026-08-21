@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export const Home = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -17,24 +19,24 @@ export const Home = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="rounded-2xl bg-primary-500 px-6 py-3 font-semibold text-white transition hover:bg-primary-600"
             >
               Sign in
-            </a>
-            <a
-              href="/register"
+            </Link>
+            <Link
+              to="/register"
               className="rounded-2xl border border-white/15 bg-white/5 px-6 py-3 font-semibold text-slate-200 transition hover:bg-white/10"
             >
               Create account
-            </a>
-            <a
-              href="/admin"
+            </Link>
+            <Link
+              to="/admin/login"
               className="rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-3 font-semibold text-red-300 transition hover:bg-red-500/20"
             >
               Open admin panel
-            </a>
+            </Link>
           </div>
         </div>
       </div>
