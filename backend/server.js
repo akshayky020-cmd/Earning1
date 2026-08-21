@@ -49,7 +49,7 @@ app.use(helmet({
             styleSrc:   ["'self'", "'unsafe-inline'"],
             imgSrc:     ["'self'", "data:", "https:"],
             fontSrc:    ["'self'"],
-            connectSrc: ["'self'", "https://earning1-lime.vercel.app", "https://earning1.onrender.com"],
+            connectSrc: ["'self'", "https://earning1-eta.vercel.app", "https://earning1.onrender.com"],
         },
     },
     referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
@@ -62,7 +62,7 @@ app.use(helmet({
 // ── CORS ──────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
     process.env.FRONTEND_URL || 'http://localhost:3001',
-    'https://earning1-lime.vercel.app'
+    'https://earning1-eta.vercel.app'
 ];
 
 app.use(cors({
