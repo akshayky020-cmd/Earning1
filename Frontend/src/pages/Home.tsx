@@ -14,7 +14,7 @@ export const Home = () => {
               Welcome to the main experience.
             </h1>
             <p className="max-w-2xl text-lg text-slate-300 sm:text-xl">
-              This is the public frontend. Use the links below to sign in, create an account, or visit the admin area.
+              This is the public frontend. Use the links below to sign in or create an account.
             </p>
           </div>
 
@@ -31,15 +31,10 @@ export const Home = () => {
             >
               Create account
             </Link>
-            <Link
-              to="/admin/login"
-              className="rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-3 font-semibold text-red-300 transition hover:bg-red-500/20"
-            >
-              Open admin panel
-            </Link>
           </div>
         </div>
       </div>
     </div>
   );
 };
+

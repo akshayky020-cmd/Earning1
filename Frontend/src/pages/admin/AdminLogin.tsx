@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../../store/slices/authSlice';
+import { RootState } from '../../store';
 import { Lock, LogIn, ArrowRight, User } from 'lucide-react';
 import api from '../../lib/api';
 
@@ -19,12 +20,18 @@ export const AdminLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'admin') {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
 
-  
   const onSubmit = async (data: LoginForm) => {
     try {
       setError('');
@@ -48,11 +55,12 @@ export const AdminLogin = () => {
         _id: user._id || user.id,
         accessToken: user.token,
       }));
-      navigate('/admin');
+      navigate('/admin/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || err.response?.data?.error?.message || 'Invalid credentials.');
     }
   };
+
 
 
   return (

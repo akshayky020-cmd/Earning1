@@ -20,7 +20,7 @@ export const AdminLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+    { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Users', path: '/admin/users', icon: Users },
     { name: 'Finances', path: '/admin/finances', icon: CreditCard },
     { name: 'Deposits', path: '/admin/deposits', icon: ArrowDownToLine },
@@ -31,8 +31,9 @@ export const AdminLayout = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/admin/login');
+    navigate('/admin');
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#121212] text-slate-900 dark:text-slate-200 font-sans flex flex-col md:flex-row">

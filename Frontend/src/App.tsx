@@ -51,10 +51,11 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             
             {/* Admin Routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminRoute />}>
-              <Route element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="finances" element={<AdminFinances />} />
                 <Route path="plans" element={<AdminPlans />} />
@@ -63,6 +64,7 @@ export default function App() {
                 <Route path="ads" element={<AdminAds />} />
               </Route>
             </Route>
+
 
             {/* User Routes */}
             <Route element={<ProtectedRoute />}>
