@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { useTheme } from '../contexts/ThemeContext';
-import { CalendarDays, ArrowLeft, Copy, Info, LineChart, History, ShoppingBag, CreditCard, Lock, LogOut, Moon, Sun, ChevronRight, ShieldAlert, PlayCircle, Download, Smartphone, AlertCircle, Loader2 } from 'lucide-react';
+import { CalendarDays, ArrowLeft, Copy, Info, LineChart, History, ShoppingBag, CreditCard, Lock, LogOut, Moon, Sun, ChevronRight, ShieldAlert, PlayCircle, Download } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, updateUser } from '../store/slices/authSlice';
 import api from '../lib/api';
@@ -12,9 +12,6 @@ export const Profile = () => {
   const { theme, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [downloading, setDownloading] = useState(false);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -33,39 +30,6 @@ export const Profile = () => {
     navigate('/login');
   };
 
-  const handleDownloadApk = async () => {
-    setDownloading(true);
-    setDownloadError(null);
-    const downloadUrl = (import.meta.env.VITE_APP_DOWNLOAD_URL || import.meta.env.NEXT_PUBLIC_APP_DOWNLOAD_URL || '/downloads/app-release.apk').trim();
-    
-    try {
-      const res = await fetch(downloadUrl);
-      if (!res.ok) {
-        setDownloadError('APK not uploaded yet.');
-        return;
-      }
-      
-      const contentType = res.headers.get('content-type') || '';
-      const text = await res.clone().text().catch(() => '');
-      
-      if (contentType.includes('text/html') || text.includes('THIS_IS_A_PLACEHOLDER_APK_FILE')) {
-        setDownloadError('APK not uploaded yet.');
-        return;
-      }
-
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = 'app-release.apk';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (err) {
-      setDownloadError('APK not uploaded yet.');
-    } finally {
-      setDownloading(false);
-    }
-  };
-
   const menuItems = [
     { icon: Info, label: 'About Company', path: '/about' },
     { icon: PlayCircle, label: 'Watch & Earn', path: '/watch-earn' },
@@ -73,8 +37,9 @@ export const Profile = () => {
     { icon: LineChart, label: 'Financial Records', path: '/records/financial' },
     { icon: History, label: 'Withdraw Records', path: '/records/withdraw' },
     { icon: ShoppingBag, label: 'Product History', path: '/records/product' },
-    { icon: CreditCard, label: 'Payment Details', path: '/wallet' }, 
+    { icon: CreditCard, label: 'Payment Details', path: '/wallet' },
     { icon: Lock, label: 'Change Password', path: '/change-password' },
+    { icon: Download, label: 'Download App', path: '/download' },
   ];
 
   return (
@@ -132,44 +97,6 @@ export const Profile = () => {
             </div>
             <p className="text-xl font-bold text-gray-900 dark:text-white">₹0</p>
           </div>
-        </div>
-
-        {/* Download App Section */}
-        <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-white/5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center text-primary-600 dark:text-primary-500">
-                <Smartphone size={20} />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm text-gray-900 dark:text-white">Android Application</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Download official APK for Android</p>
-              </div>
-            </div>
-            <button
-              onClick={handleDownloadApk}
-              disabled={downloading}
-              className="flex items-center space-x-2 bg-primary-500 hover:bg-primary-600 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-md shadow-primary-500/20 disabled:opacity-60 cursor-pointer"
-            >
-              {downloading ? (
-                <>
-                  <Loader2 size={16} className="animate-spin" />
-                  <span>Checking...</span>
-                </>
-              ) : (
-                <>
-                  <Download size={16} />
-                  <span>Download App</span>
-                </>
-              )}
-            </button>
-          </div>
-          {downloadError && (
-            <div className="mt-3 p-2.5 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl flex items-center text-amber-700 dark:text-amber-400 text-xs font-medium">
-              <AlertCircle size={15} className="mr-2 flex-shrink-0" />
-              <span>{downloadError}</span>
-            </div>
-          )}
         </div>
 
         {/* Menu List */}

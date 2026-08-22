@@ -28,6 +28,7 @@ import { ChangePassword } from './pages/ChangePassword';
 import { WatchAndEarn } from './pages/WatchAndEarn';
 import { Home } from './pages/Home';
 import { PaymentPage } from './pages/PaymentPage';
+import { Download } from './pages/Download';
 
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -81,6 +82,7 @@ export default function App() {
                 <Route path="/invite" element={<Invite />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/download" element={<Download />} />
                 <Route path="/records/financial" element={<FinancialRecords />} />
                 <Route path="/records/withdraw" element={<WithdrawRecords />} />
                 <Route path="/records/product" element={<ProductHistory />} />
